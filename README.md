@@ -63,7 +63,8 @@ Everything runs inside Home Assistant (tested on 2026.10); there is no extra ser
 | [card-mod](https://github.com/thomasloven/lovelace-card-mod) | Colours the tiles green / yellow / red / grey from the sensor state and lets long status text wrap. | Required for colours; tiles work uncoloured without it |
 | [ApexCharts card](https://github.com/RomRider/apexcharts-card) | The fever chart: temperature line, fever line, dose dots, night band. Reads its data from sensor attributes. | Only if you want the chart |
 
-Storage is SQLite via Python's standard library — no MariaDB, no recorder dependency, no cloud.
+**Data**: one SQLite file, `/config/medication_tracker.db` (tables `doses` and `temperatures`,
+UTC timestamps). It lives in `/config`, so Home Assistant's own backups include it.
 
 Browser Mod registration: backend-initiated popups only reach **registered** browsers. Browser Mod
 integration → Configure → turn *Auto-register* on, reload the device, turn it off again. On wall
