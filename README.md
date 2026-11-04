@@ -1,15 +1,13 @@
 # ha-medication-tracker
 
+> **Not medical advice.** This is a record-keeping and reminder tool. It never decides what to
+> give. See [Disclaimer](#disclaimer) before using it.
+
 A small, reliable medication and temperature tracker for a child, built on Home Assistant.
 Tap a tile to record a dose, tap another to log a temperature, see a fever chart with the
 doses on it, and a 48-hour log you can read to the pediatrician.
 
 Built for the moment at 3 a.m. when two tired parents are asking "when did we last give what?"
-
-> **Not medical advice.** This is a record-keeping and reminder tool. It never decides what to
-> give. See [Disclaimer](#disclaimer) before using it.
-
-![Tiles on a phone](docs/tiles-phone.png)
 
 ## What it does
 
@@ -26,8 +24,15 @@ Built for the moment at 3 a.m. when two tired parents are asking "when did we la
 - **Tiles**: green = the configured rules allow another dose, yellow = within an hour,
   red = too early. Nothing more than that.
 
-![Fever chart](docs/chart.png)
-![Timeline](docs/log.png)
+## Screenshots
+
+| Phone / desktop | Wall panel |
+|---|---|
+| ![Tiles on a phone](docs/tiles-phone.png) | ![Tiles on a wall panel](docs/tiles-panel.png) |
+
+| Fever chart | Timeline |
+|---|---|
+| ![Fever chart](docs/chart.png) | ![Timeline](docs/log.png) |
 
 ## Design decisions
 
