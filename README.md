@@ -1,5 +1,7 @@
 # ha-medication-tracker
 
+[![tests](https://github.com/lucacanonica/ha-medication-tracker/actions/workflows/tests.yml/badge.svg)](https://github.com/lucacanonica/ha-medication-tracker/actions/workflows/tests.yml)
+
 > **Not medical advice.** This is a record-keeping and reminder tool. It never decides what to
 > give. See [Disclaimer](#disclaimer) before using it.
 
