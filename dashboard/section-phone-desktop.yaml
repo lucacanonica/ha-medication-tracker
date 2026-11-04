@@ -1,0 +1,294 @@
+# Medication section for phone / desktop: normal tile height, dose in the title.
+
+type: grid
+cards:
+  - type: heading
+    heading: Medication
+    heading_style: subtitle
+    icon: mdi:medication
+  - type: tile
+    entity: sensor.medication_tylenol
+    icon: mdi:pill
+    state_content:
+      - status_text
+      - count_text
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: tap
+          medication: tylenol
+          browser_id: THIS
+          user_id: THIS
+    icon_tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: open_form
+          medication: tylenol
+          browser_id: THIS
+          user_id: THIS
+    double_tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: open_form
+          medication: tylenol
+          browser_id: THIS
+          user_id: THIS
+    hold_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: open_form
+          medication: tylenol
+          browser_id: THIS
+          user_id: THIS
+    card_mod:
+      style:
+        ha-tile-info$: |
+          .info { height: auto !important; }
+          .primary, .secondary { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; }
+        .: |
+          ha-card {
+            {% set s = states('sensor.medication_tylenol') %}
+            {% if s == 'eligible' %}
+              background: #D8F3DC !important; --tile-color: #2E7D32;
+            {% elif s == 'approaching' %}
+              background: #FFF0B3 !important; --tile-color: #B26A00;
+            {% elif s == 'too_soon' %}
+              background: #FADADD !important; --tile-color: #C62828;
+            {% else %}
+              background: #E5E7EB !important; --tile-color: #6B7280;
+            {% endif %}
+            --primary-text-color: #172B20;
+            --secondary-text-color: #374151;
+            transition: background 0.3s ease;
+          }
+          state-display { white-space: normal !important; }
+    grid_options:
+      columns: 6
+      rows: auto
+  - type: tile
+    entity: sensor.medication_ibuprofen
+    icon: mdi:pill
+    state_content:
+      - status_text
+      - count_text
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: tap
+          medication: ibuprofen
+          browser_id: THIS
+          user_id: THIS
+    icon_tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: open_form
+          medication: ibuprofen
+          browser_id: THIS
+          user_id: THIS
+    double_tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: open_form
+          medication: ibuprofen
+          browser_id: THIS
+          user_id: THIS
+    hold_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: open_form
+          medication: ibuprofen
+          browser_id: THIS
+          user_id: THIS
+    card_mod:
+      style:
+        ha-tile-info$: |
+          .info { height: auto !important; }
+          .primary, .secondary { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; }
+        .: |
+          ha-card {
+            {% set s = states('sensor.medication_ibuprofen') %}
+            {% if s == 'eligible' %}
+              background: #D8F3DC !important; --tile-color: #2E7D32;
+            {% elif s == 'approaching' %}
+              background: #FFF0B3 !important; --tile-color: #B26A00;
+            {% elif s == 'too_soon' %}
+              background: #FADADD !important; --tile-color: #C62828;
+            {% else %}
+              background: #E5E7EB !important; --tile-color: #6B7280;
+            {% endif %}
+            --primary-text-color: #172B20;
+            --secondary-text-color: #374151;
+            transition: background 0.3s ease;
+          }
+          state-display { white-space: normal !important; }
+    grid_options:
+      columns: 6
+      rows: auto
+  - type: tile
+    entity: sensor.medication_zyrtec
+    icon: mdi:pill
+    state_content:
+      - status_text
+      - count_text
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: tap
+          medication: zyrtec
+          browser_id: THIS
+          user_id: THIS
+    icon_tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: open_form
+          medication: zyrtec
+          browser_id: THIS
+          user_id: THIS
+    double_tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: open_form
+          medication: zyrtec
+          browser_id: THIS
+          user_id: THIS
+    hold_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: open_form
+          medication: zyrtec
+          browser_id: THIS
+          user_id: THIS
+    card_mod:
+      style:
+        ha-tile-info$: |
+          .info { height: auto !important; }
+          .primary, .secondary { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; }
+        .: |
+          ha-card {
+            {% set s = states('sensor.medication_zyrtec') %}
+            {% if s == 'eligible' %}
+              background: #D8F3DC !important; --tile-color: #2E7D32;
+            {% elif s == 'approaching' %}
+              background: #FFF0B3 !important; --tile-color: #B26A00;
+            {% elif s == 'too_soon' %}
+              background: #FADADD !important; --tile-color: #C62828;
+            {% else %}
+              background: #E5E7EB !important; --tile-color: #6B7280;
+            {% endif %}
+            --primary-text-color: #172B20;
+            --secondary-text-color: #374151;
+            transition: background 0.3s ease;
+          }
+          state-display { white-space: normal !important; }
+    grid_options:
+      columns: 6
+      rows: auto
+  - type: tile
+    entity: sensor.medication_temperature
+    icon: mdi:thermometer
+    state_content:
+      - reading
+      - age
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: temp_quick_form
+          browser_id: THIS
+          user_id: THIS
+    icon_tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: temp_open_form
+          browser_id: THIS
+          user_id: THIS
+    double_tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: temp_open_form
+          browser_id: THIS
+          user_id: THIS
+    hold_action:
+      action: fire-dom-event
+      browser_mod:
+        service: script.medication_record
+        data:
+          source: temp_open_form
+          browser_id: THIS
+          user_id: THIS
+    card_mod:
+      style:
+        ha-tile-info$: |
+          .info { height: auto !important; }
+          .primary, .secondary { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; }
+        .: |
+          ha-card {
+            {% set l = state_attr('sensor.medication_temperature', 'level') %}
+            {% if l == 'normal' %}
+              background: #E3F2FD !important; --tile-color: #1565C0;
+            {% elif l == 'fever' %}
+              background: #FFF0B3 !important; --tile-color: #B26A00;
+            {% elif l == 'high' %}
+              background: #FADADD !important; --tile-color: #C62828;
+            {% else %}
+              background: #E5E7EB !important; --tile-color: #6B7280;
+            {% endif %}
+            --primary-text-color: #172B20;
+            --secondary-text-color: #374151;
+            transition: background 0.3s ease;
+          }
+          state-display { white-space: normal !important; }
+    grid_options:
+      columns: 6
+      rows: auto
+  - type: horizontal-stack
+    cards:
+      - type: tile
+        entity: sensor.sun_next_noon
+        name: Medication Chart
+        icon: mdi:chart-bell-curve
+        hide_state: true
+        vertical: false
+        tap_action:
+          action: navigate
+          navigation_path: /YOUR-DASHBOARD/medication-chart
+        features_position: bottom
+      - type: tile
+        entity: sensor.sun_next_noon
+        name: Medication Log
+        icon: mdi:math-log
+        hide_state: true
+        vertical: false
+        tap_action:
+          action: navigate
+          navigation_path: /YOUR-DASHBOARD/medication-log
+        features_position: bottom

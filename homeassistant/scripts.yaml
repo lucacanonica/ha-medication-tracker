@@ -1,0 +1,69 @@
+# The ONLY medication script. Paste into /config/scripts.yaml at root level
+# and delete the six old medication_* scripts.
+#
+# source: tap | confirm | form | form_panel | open_form | temp | temp_panel | temp_open_form | temp_quick_form
+# *_panel sources read the helpers input_number.medication_temp_entry / medication_dose_entry / medication_hours_ago
+# It is a thin bridge: dashboard -> this script -> HA event -> AppDaemon.
+# AppDaemon does all validation and answers in the originating browser.
+
+medication_record:
+  alias: Medication record (bridge to AppDaemon)
+  mode: queued
+  max: 10
+  fields:
+    source:
+      name: Request type (see header comment)
+    medication:
+      name: Medication (tylenol / ibuprofen)
+    browser_id:
+      name: Originating browser (THIS)
+    user_id:
+      name: Originating user (THIS)
+    volume_ml:
+      name: Amount in mL (confirm / form)
+    administered_at:
+      name: Administration time (confirm)
+    given_at:
+      name: Administration time from the edit form
+    temp_f:
+      name: Temperature in °F (temp)
+  sequence:
+    - if:
+        - condition: template
+          value_template: >-
+            {{ states.sensor.medication_tracker_heartbeat is none
+               or (now() - states.sensor.medication_tracker_heartbeat.last_updated).total_seconds() > 180 }}
+      then:
+        - action: browser_mod.popup
+          data:
+            browser_id: "{{ browser_id | default('') }}"
+            title: Tracker offline
+            content: >-
+              The medication tracker (AppDaemon) has not reported in for
+              over 3 minutes. Nothing was recorded.
+            right_button: OK
+        - stop: Medication tracker offline
+    - event: medication_record
+      event_data:
+        source: "{{ source | default('tap') }}"
+        medication: "{{ medication | default('') }}"
+        browser_id: "{{ browser_id | default('') }}"
+        user_id: "{{ user_id | default('') }}"
+        volume_ml: >-
+          {{ states('input_number.medication_dose_entry') if source | default('') == 'form_panel'
+             else volume_ml | default('') }}
+        temp_f: >-
+          {{ states('input_number.medication_temp_entry') if source | default('') == 'temp_panel'
+             else temp_f | default('') }}
+        administered_at: >-
+          {% set src = source | default('') %}
+          {% set ago = states('input_number.medication_hours_ago') | float(0) %}
+          {% if src in ['temp_panel', 'form_panel'] and ago > 0 %}
+            {{ (now() - timedelta(hours=ago)).isoformat() }}
+          {% elif src in ['temp_panel', 'form_panel'] %}
+            now
+          {% elif given_at is defined and given_at | string | trim != '' %}
+            {{ given_at }}
+          {% else %}
+            {{ administered_at | default('') }}
+          {% endif %}

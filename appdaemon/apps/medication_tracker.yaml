@@ -1,0 +1,84 @@
+# AppDaemon app config.
+# AppDaemon add-on path: /addon_configs/a0d7b954_appdaemon/apps/medication_tracker.yaml
+#
+# EXAMPLE VALUES. The dose charts below are placeholders - enter the chart your
+# pediatrician gave you. This tracker records and reminds; it does not prescribe.
+
+medication_tracker:
+  module: medication_tracker
+  class: MedicationTracker
+
+  enabled: true
+  weight_entity: input_number.child_weight_lb     # Number helper, pounds
+
+  # SQLite file. Point at a scratch file first (e.g. /config/medication_tracker_TEST.db),
+  # then switch to the real one. AppDaemon reloads the app when this file is saved.
+  db_path: /config/medication_tracker.db
+
+  # Temperature tile / fever chart (°F). Thresholds colour the tile.
+  temperature:
+    enabled: true
+    fever_f: 100.4        # amber from here
+    high_fever_f: 102.2   # red from here
+    stale_hours: 12       # tile goes grey when the last reading is older
+    min_f: 93             # outside min/max = typo, not recorded
+    max_f: 108
+    history_days: 4       # points kept for the chart
+    timeline_hours: 48    # rows in the markdown timeline
+    # Number helpers behind the -/+ popups (create in Settings > Helpers):
+    entry_helper: input_number.medication_temp_entry      # 97-105, step 0.1, °F
+    dose_helper: input_number.medication_dose_entry       # 0.25-15, step 0.25, mL
+    hours_ago_helper: input_number.medication_hours_ago   # 0-48, step 0.5, h
+
+  # Optional: HA user id -> name stored as caregiver. Find ids under
+  # Settings > People > Users (click a user, the ID is shown there).
+  # caregivers:
+  #   0123456789abcdef0123456789abcdef: Parent 1
+  #   fedcba9876543210fedcba9876543210: Parent 2
+
+  medications:
+    tylenol:
+      enabled: true
+      default_product: childrens_liquid
+      products:
+        childrens_liquid:
+          concentration_mg_ml: 32        # 160 mg / 5 mL
+      min_interval_hours: 4
+      max_doses_24h: 5
+      max_volume_ml: 10                  # hard cap for the edit popup
+      dose_chart:                        # EXAMPLE - use your pediatrician's chart
+        - {min_lb: 12, max_lb_exclusive: 18, dose_ml: 2.5}
+        - {min_lb: 18, max_lb_exclusive: 24, dose_ml: 3.75}
+        - {min_lb: 24, max_lb_exclusive: 36, dose_ml: 5.0}
+        - {min_lb: 36, max_lb_exclusive: 48, dose_ml: 7.5}
+        - {min_lb: 48, max_lb_exclusive: 60, dose_ml: 10.0}
+        - {min_lb: 60, max_lb_exclusive: 72, dose_ml: 12.5}
+        - {min_lb: 72, max_lb_exclusive: 96, dose_ml: 15.0}
+
+    ibuprofen:
+      enabled: true
+      default_product: childrens_liquid
+      products:
+        infant_drops:
+          concentration_mg_ml: 40        # 50 mg / 1.25 mL
+        childrens_liquid:
+          concentration_mg_ml: 20        # 100 mg / 5 mL
+      min_interval_hours: 6
+      max_doses_24h: 4
+      max_volume_ml: 10
+      dose_chart:                        # EXAMPLE - use your pediatrician's chart
+        - {min_lb: 12, max_lb_exclusive: 18, dose_mg: 50}
+        - {min_lb: 18, max_lb_exclusive: 24, dose_mg: 75}
+        - {min_lb: 24, max_lb_exclusive: 36, dose_mg: 100}
+
+    # A medication without a weight chart: one fixed dose.
+    zyrtec:
+      enabled: true
+      default_product: childrens_syrup
+      products:
+        childrens_syrup:
+          concentration_mg_ml: 1         # 5 mg / 5 mL - check the bottle
+      min_interval_hours: 24
+      max_doses_24h: 1
+      max_volume_ml: 5
+      fixed_dose_ml: 2.5                 # change the dose here

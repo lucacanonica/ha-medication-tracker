@@ -1,0 +1,165 @@
+# Subview with the fever/dose chart (ApexCharts card). Add under `views:` of your dashboard.
+
+type: sections
+max_columns: 1
+title: Medication Chart
+path: medication-chart
+icon: mdi:chart-bell-curve
+subview: true
+sections:
+  - type: grid
+    cards:
+      - type: custom:apexcharts-card
+        header:
+          show: true
+          show_states: false
+        graph_span: 48h
+        cache: false
+        now:
+          show: true
+          label: now
+          color: '#6B7280'
+        yaxis:
+          - id: temp
+            min: ~97
+            max: ~104
+            decimals: 1
+            apex_config:
+              tickAmount: 7
+              title:
+                text: °F
+          - id: dose
+            show: false
+            min: 0
+            max: 20
+          - id: night
+            show: false
+            min: 0
+            max: 1
+        series:
+          - entity: sensor.medication_timeline
+            name: Night
+            yaxis_id: night
+            type: area
+            curve: stepline
+            stroke_width: 0
+            color: '#90A4AE'
+            opacity: 0.18
+            extend_to: false
+            show:
+              legend_value: false
+              in_header: false
+            data_generator: |
+              // 1 between 19:00 and 07:00 local time, 0 otherwise -> shaded night band
+              const out = [];
+              const t = new Date(start); t.setMinutes(0, 0, 0);
+              while (t <= end) {
+                const h = t.getHours();
+                out.push([t.getTime(), (h >= 19 || h < 7) ? 1 : 0]);
+                t.setHours(t.getHours() + 1);
+              }
+              out.push([end.getTime(), out.length ? out[out.length - 1][1] : 0]);
+              return out;
+          - entity: sensor.medication_temperature
+            name: Temperature
+            yaxis_id: temp
+            type: line
+            curve: straight
+            stroke_width: 2
+            color: '#C62828'
+            extend_to: false
+            float_precision: 1
+            unit: °F
+            data_generator: |
+              return (entity.attributes.history || []).map(p => [new Date(p[0]).getTime(), p[1]]);
+          - entity: sensor.medication_tylenol
+            name: Tylenol
+            yaxis_id: dose
+            type: line
+            stroke_width: 0
+            color: '#1E88E5'
+            extend_to: false
+            float_precision: 2
+            unit: mL
+            show:
+              legend_value: false
+            data_generator: |
+              return (entity.attributes.doses || []).map(p => [new Date(p[0]).getTime(), p[1]]);
+          - entity: sensor.medication_ibuprofen
+            name: Ibuprofen
+            yaxis_id: dose
+            type: line
+            stroke_width: 0
+            color: '#8E24AA'
+            extend_to: false
+            float_precision: 2
+            unit: mL
+            show:
+              legend_value: false
+            data_generator: |
+              return (entity.attributes.doses || []).map(p => [new Date(p[0]).getTime(), p[1]]);
+          - entity: sensor.medication_temperature
+            name: Fever line
+            yaxis_id: temp
+            type: line
+            stroke_width: 1
+            color: '#FB8C00'
+            extend_to: false
+            float_precision: 1
+            unit: °F
+            show:
+              legend_value: false
+              in_header: false
+            data_generator: |
+              const f = entity.attributes.fever_f || 100.4;
+              return [[start.getTime(), f], [end.getTime(), f]];
+        apex_config:
+          chart: {}
+          markers:
+            size:
+              - 0
+              - 4
+              - 7
+              - 7
+              - 0
+            strokeWidth: 1
+          legend:
+            show: true
+            position: top
+          xaxis:
+            labels:
+              datetimeUTC: false
+              format: ddd HH:mm
+            tickAmount: 8
+          tooltip:
+            x:
+              format: ddd HH:mm
+          stroke:
+            dashArray:
+              - 0
+              - 0
+              - 0
+              - 0
+              - 5
+          fill:
+            type: solid
+        section_mode: true
+        grid_options:
+          columns: 12
+          rows: 6
+        visibility:
+          - condition: numeric_state
+            entity: sensor.medication_timeline
+            above: 0
+badges:
+  - type: shortcut
+    tap_action:
+      action: navigate
+      navigation_path: /YOUR-DASHBOARD
+    icon: mdi:arrow-left
+    text: ' '
+    color: black
+header:
+  layout: responsive
+  badges_position: top
+  badges_wrap: wrap
