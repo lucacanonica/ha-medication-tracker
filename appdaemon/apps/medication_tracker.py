@@ -219,7 +219,8 @@ class Core:
         if "fixed_dose_ml" in cfg:  # no weight chart: one configured dose
             ml = float(cfg["fixed_dose_ml"])
             if not math.isfinite(ml) or ml <= 0:
-                raise Rejected("config", f"Invalid fixed_dose_ml for {medication}")
+                raise Rejected("config", f"No dose configured for {medication} - set "
+                                         "fixed_dose_ml in medication_tracker.yaml")
             return {"weight_lb": None, "product": product, "concentration_mg_ml": conc,
                     "dose_ml": round(ml, 3), "dose_mg": round(ml * conc, 3)}
 
@@ -242,7 +243,9 @@ class Core:
                     ml = float(row["dose_ml"])
                     mg = ml * conc
                 if not all(math.isfinite(v) and v > 0 for v in (ml, mg)):
-                    raise Rejected("config", "Chart row produces an invalid dose")
+                    raise Rejected("config", f"No dose configured for {medication} at "
+                                             f"{weight:g} lb - fill in the dose chart in "
+                                             "medication_tracker.yaml")
                 return {
                     "weight_lb": weight,
                     "product": product,

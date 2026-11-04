@@ -6,9 +6,10 @@ doses on it, and a 48-hour log you can read to the pediatrician.
 
 Built for the moment at 3 a.m. when two tired parents are asking "when did we last give what?"
 
-> **This is a record-keeping and reminder tool, not medical advice.** It never decides what to
-> give. The dose charts in the example config are placeholders — enter the chart your
-> pediatrician gave you, and when in doubt call them.
+> **Not medical advice.** This is a record-keeping and reminder tool. It never decides what to
+> give. See [Disclaimer](#disclaimer) before using it.
+
+![Tiles on a phone](docs/tiles-phone.png)
 
 ## What it does
 
@@ -24,6 +25,9 @@ Built for the moment at 3 a.m. when two tired parents are asking "when did we la
 - **Timeline**: a day-grouped list of readings and doses for the last 48 h.
 - **Tiles**: green = the configured rules allow another dose, yellow = within an hour,
   red = too early. Nothing more than that.
+
+![Fever chart](docs/chart.png)
+![Timeline](docs/log.png)
 
 ## Design decisions
 
@@ -113,6 +117,16 @@ without Home Assistant:
 pip install pytest
 pytest tests
 ```
+
+## Disclaimer
+
+This software is provided for personal record-keeping. It is **not medical advice** and does not
+calculate, recommend or verify any medication dose. All dose charts, concentrations, intervals,
+daily limits and safety caps in the example configuration are **placeholders shipped as zero**;
+you must enter the values from your product's label and your child's pediatrician, and you are
+responsible for verifying every number. Colours and countdowns reflect only the rules you
+configured. The author accepts no liability for any use of this software. If you are unsure
+about a dose, call your pediatrician or poison control.
 
 ## Status
 
