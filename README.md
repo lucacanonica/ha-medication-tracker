@@ -130,7 +130,7 @@ status transitions, temperature levels, timeline) are covered by `tests/test_cor
 without Home Assistant:
 
 ```
-pip install pytest
+pip install pytest pyyaml
 pytest tests
 ```
 
