@@ -51,16 +51,31 @@ Built for the moment at 3 a.m. when two tired parents are asking "when did we la
   recorder purges and backdated entries sit where they belong.
 - **Test and production are a config line.** `db_path` in the app's yaml.
 
-## Requirements
+## Tools used
 
-- Home Assistant (tested on 2026.10) with the **AppDaemon** add-on
-- HACS frontend: **Browser Mod** (popups/toasts), **card-mod** (tile colours),
-  **ApexCharts card** (chart)
-- Three Number helpers (see Install)
-- Browser Mod **registration** for every device that should receive popups — backend-initiated
-  popups only reach registered browsers (Browser Mod integration → Configure → Auto-register,
-  reload the device, then turn auto-register off). On wall panels also disable
-  *Profile → Automatically close connection*.
+Everything runs inside Home Assistant (tested on 2026.10); there is no extra server, container or database to run.
+
+| Tool | What it does here | Needed? |
+|---|---|---|
+| [AppDaemon add-on](https://github.com/hassio-addons/addon-appdaemon) ([AppDaemon](https://github.com/AppDaemon/appdaemon)) | Runs `medication_tracker.py`: the rules, the SQLite writes, the popups. The HA event → Python bridge. | Required |
+| SQLite (Python standard library) | The permanent record: `doses` and `temperatures` tables in one file under `/config`. No MariaDB or recorder dependency. | Required (nothing to install) |
+| [HACS](https://hacs.xyz/) | Installs the three frontend/integration pieces below. | Required |
+| [Browser Mod](https://github.com/thomasloven/hass-browser_mod) | Lets the backend show toasts and popups in the browser that tapped, and the `browser_id: THIS` routing. Every device that should see popups must be registered in it. | Required |
+| [card-mod](https://github.com/thomasloven/lovelace-card-mod) | Colours the tiles green / yellow / red / grey from the sensor state and lets long status text wrap. | Required for colours; tiles work uncoloured without it |
+| [ApexCharts card](https://github.com/RomRider/apexcharts-card) | The fever chart: temperature line, fever line, dose dots, night band. Reads the data from sensor attributes. | Only if you want the chart |
+| HA [sections view](https://www.home-assistant.io/dashboards/sections/) | Dashboard layout; `grid_options` size the tiles. | Required for the provided YAML |
+| HA [tile card](https://www.home-assistant.io/dashboards/tile/) | The four tiles. Its built-in *numeric input* feature (−/+ buttons) is also what the entry popups are made of. | Required |
+| HA [markdown card](https://www.home-assistant.io/dashboards/markdown/) | The 48-hour timeline, rendered from a sensor attribute. | Only if you want the log |
+| HA card `visibility` conditions | Hide the chart and log cards when there is nothing in the last 48 h. | Optional |
+| HA [Number helpers](https://www.home-assistant.io/integrations/input_number/) (`input_number`) | Child weight, and the three scratch values behind the −/+ popups (temperature, amount, hours ago). | Required |
+| [pytest](https://docs.pytest.org/) | Runs the rule tests on your computer; not needed on the HA box. | Only for development |
+
+Not used: MariaDB/recorder for history (the chart reads attributes, so nothing depends on the recorder), Mushroom cards, config-template-card, any cloud service.
+
+Browser Mod registration: backend-initiated popups only reach **registered** browsers. Browser Mod
+integration → Configure → turn *Auto-register* on, reload the device, turn it off again. On wall
+panels also disable *Profile → Automatically close connection*, or the panel stops receiving
+popups after five idle minutes.
 
 ## Install
 
