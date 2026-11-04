@@ -229,7 +229,7 @@ class Core:
         try:
             weight = float(weight_state)
         except (TypeError, ValueError):
-            raise Rejected("weight", f"Weight '{weight_state}' is not a number")
+            raise Rejected("weight", f"Weight '{weight_state}' is not a number") from None
         if not math.isfinite(weight) or weight <= 0:
             raise Rejected("weight", f"Weight {weight:g} lb is invalid")
 
@@ -441,7 +441,7 @@ class Core:
         try:
             volume = float(volume_ml)
         except (TypeError, ValueError):
-            raise Rejected("volume", f"Amount '{volume_ml}' is not a number")
+            raise Rejected("volume", f"Amount '{volume_ml}' is not a number") from None
         if not math.isfinite(volume) or volume <= 0:
             raise Rejected("volume", "Amount must be greater than 0 mL")
         hard_max = float(cfg.get("max_volume_ml", 2 * dose["dose_ml"]))
@@ -474,7 +474,7 @@ class Core:
                 db.execute("COMMIT")
             except sqlite3.IntegrityError:
                 db.execute("ROLLBACK")
-                raise Rejected("duplicate", "Already recorded (same time)")
+                raise Rejected("duplicate", "Already recorded (same time)") from None
             except Exception:
                 db.execute("ROLLBACK")
                 raise
@@ -507,7 +507,7 @@ class Core:
         try:
             temp = float(value)
         except (TypeError, ValueError):
-            raise Rejected("value", f"Temperature '{value}' is not a number")
+            raise Rejected("value", f"Temperature '{value}' is not a number") from None
         lo, hi = float(c["min_f"]), float(c["max_f"])
         if not math.isfinite(temp) or not (lo <= temp <= hi):
             raise Rejected("value", f"{value} °F is outside {lo:g}-{hi:g} °F - looks like a "
@@ -521,7 +521,7 @@ class Core:
                     (when.isoformat(), temp, caregiver, now.isoformat(), source),
                 )
             except sqlite3.IntegrityError:
-                raise Rejected("duplicate", "Already recorded (same time)")
+                raise Rejected("duplicate", "Already recorded (same time)") from None
         return {"temp_f": temp, "when": when, "level": self.temp_level(temp, now - when)}
 
     # --- request handling ------------------------------------------------
@@ -537,7 +537,7 @@ class Core:
             return datetime.fromisoformat(str(raw).strip()).replace(
                 tzinfo=self.tz).astimezone(timezone.utc)
         except ValueError:
-            raise Rejected("time", f"Can't read the time '{raw}'")
+            raise Rejected("time", f"Can't read the time '{raw}'") from None
 
     def handle(self, data, weight_state, now):
         """Process one `medication_record` event.
